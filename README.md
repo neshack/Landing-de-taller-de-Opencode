@@ -1,119 +1,173 @@
-# Landing del taller — Curso de OpenCode
+# Landing del Taller de OpenCode 2
 
-Página estática de una sola pieza (`index.html`) pensada para resolver el QR de cierre del deck
-actualizado: diapositiva 20 (D14 en la numeración original), temario, preparación del entorno,
-guía de uso de los archivos del kit y contacto del instructor.
+Sitio estático (una sola página, sin build) para la landing del **Curso de OpenCode 2 — Taller práctico para consultores**. Publicado con GitHub Pages.
 
-- **Sin build, sin framework, sin peticiones externas.** HTML + CSS + un script inline mínimo.
-- Funciona desde `file://` (doble clic en `index.html`) y desde cualquier host estático.
-- Tema oscuro único (fijado por el propio deck: el QR se escanea en una sala con poca luz).
-- Todo el contenido visible está en español; el código y los comentarios, en inglés.
+- **Demo en vivo:** https://neshack.github.io/Landing-de-taller-de-Opencode/
+- **Autor:** Néstor Peña ([@neshack](https://x.com/neshack) · [LinkedIn](https://www.linkedin.com/in/neshack))
+- **Complemento:** [infomanagement](https://infomg.mx)
 
-## Deploy
+---
 
-1. Sube el contenido completo de `landing/` (`index.html` + `assets/`) al host estático que uses
-   (GitHub Pages, Netlify, Cloudflare Pages, S3, IIS, nginx...). No hay rutas absolutas:
-   la página funciona igual en la raíz del dominio o en un subdirectorio.
-2. Abre la URL publicada y comprueba que la portada y la fuente mono se ven bien. No hace falta
-   configurar nada más: no hay cookies, ni analítica, ni llamadas a CDN.
+## Qué es este repositorio
 
-Prueba local sin publicar:
+Es el sitio público que presenta el taller: temario, datos de la sesión, forma de preparar el entorno y quién lo imparte. No es la herramienta del taller ni el kit de materiales: es la página que el participante abre (normalmente desde el QR del proyector) y desde la que se entra a todo lo demás.
 
-```bash
-python -m http.server 8787 --directory landing   # luego http://127.0.0.1:8787/
+La página es un único `index.html` autónomo. No hay framework, ni bundler, ni `package.json`, ni dependencia de terceros en tiempo de ejecución.
+
+## Estructura
+
+```
+.
+├── index.html                      # página completa: HTML + CSS + JS en línea
+├── assets/
+│   ├── fonts/                      # Geist Sans + Geist Mono (woff2, self-hosted)
+│   │   └── OFL.txt                 # SIL Open Font License 1.1
+│   └── img/                        # hero, OG image, wordmarks y logo de infomanagement
+├── README.md                       # (vacío por ahora)
+└── README2.md                      # documentación del repositorio
 ```
 
-## El QR de cierre (diapositiva 20 / D14)
+No hay un `CNAME`: el sitio se sirve en la URL de proyecto de GitHub Pages.
 
-El destino público todavía no está decidido (las tres opciones están en
-`../instructor/checklist-pre-taller.md`). Pasos cuando se decida:
+## Desarrollo local
 
-1. Publica `landing/` y **copia la URL final**.
-2. Genera el QR con esa URL (el repo no incluye generador de QR).
-3. Pega el QR en la diapositiva 20 (`bonus`) del deck nuevo; en la numeración original corresponde a D14 (`../presentacion/mejorada/Curso de OpenCode - mejorada.pptx`).
+No hay nada que compilar. Cualquiera de estas dos opciones funciona:
 
-La página **no promete ninguna descarga**: describe cómo usar los archivos del kit. Si algún día
-existe un enlace público, se añade como CTA adicional y se actualiza también este README.
+```bash
+# Abrir el archivo directamente
+open index.html          # macOS
+start index.html         # Windows
 
-## Dónde editar el contenido
+# O servirlo por HTTP (más fiel a producción)
+python -m http.server 8000
+npx serve .
+```
 
-Todo el contenido vive en `index.html`. Cada bloque está delimitado por un comentario en el CSS y
-por su etiqueta en el HTML:
+Luego abrir <http://localhost:8000>.
 
-| Sección | Qué contiene | Ancla |
+## Despliegue
+
+El repositorio se publica desde `main` usando **GitHub Pages**:
+
+1. **Settings → Pages**
+2. **Source:** *Deploy from a branch*
+3. **Branch:** `main` · **Folder:** `/ (root)`
+4. Guardar
+
+Cada `push` a `main` reconstruye y publica el sitio. También se puede publicar manualmente con la CLI, si ya estás autenticado:
+
+```bash
+gh api -X POST repos/:owner/:repo/pages \
+  -f source[branch]=main \
+  -f source[path]=/ \
+  --jq '.html_url'
+```
+
+## Decisiones técnicas
+
+### Una sola página, cero dependencias
+
+El contenido cabe en una sesión de 2 horas y el público entra desde un móvil con datos móviles. El presupuesto de carga manda: HTML, CSS y JS en el mismo archivo, fuentes servidas desde el propio repositorio y ninguna petición a terceros en runtime. No hay CDNs, ni Google Fonts, ni scripts de terceros.
+
+### Tema oscuro únicamente
+
+El deck se proyecta en una sala con luz baja, así que la página solo existe en oscuro. Los tokens viven en `:root` dentro del `<style>` de `index.html`:
+
+| Token | Valor | Uso |
 | --- | --- | --- |
-| Barra superior | Logotipo de OpenCode, «Ver el temario», `@neshack` | — |
-| Portada | Franja de estado de OpenCode 2, titular, resumen del taller, CTAs e ilustración | `#inicio` |
-| Datos del taller | Una sesión, máximo de 2 horas, demos y entorno de OpenCode 2 | — |
-| Temario | Los 6 bloques y sus números de diapositiva del deck actual (1–20); la diapositiva 20 corresponde a D14 | `#temario` |
-| Cómo usar los archivos | 3 pasos, comandos del setup con pestañas y árbol del kit | `#archivos` |
-| Instructor | Nombre, rol y enlace a X | — |
-| Pie | Wordmark de OpenCode, chip de infomanagement, créditos | — |
+| `--bg` / `--bg-2` | `#0A0E14` / `#0C1219` | Fondo base y franjas alternas |
+| `--plate` / `--plate-2` | `#10171F` / `#151D27` | Superficies elevadas (código, kit) |
+| `--line` / `--line-2` | `#1C2634` / `#27323F` | Separadores y bordes |
+| `--ink` / `--ink-2` / `--ink-3` | `#E9EFF6` / `#A6B3C2` / `#7E8B9C` | Texto en tres niveles |
+| `--accent` / `--accent-2` | `#FF7A2A` / `#FF9A3C` | Naranja terminal del deck |
+| `--r-plate` / `--r-control` | `14px` / `10px` | Radios: superficies y controles |
+| `--wrap` | `1200px` | Ancho máximo de contenido |
+| `--ease` | `cubic-bezier(.16,1,.3,1)` | Curva única para toda transición |
 
-**Datos: no inventar.** Las cifras y los textos salen de estas fuentes del kit y hay que mantenerlas
-sincronizadas si el material cambia:
+Se usan dos familias: **Geist Sans** para el texto y **Geist Mono** para todo lo factual (fechas, comandos, rutas, números). El monoespaciado no es decorativo: es la convención visual de una terminal.
 
-- `../instructor/guia-instructor.md` — nombres y secuencia de los bloques, además de la correspondencia D1–D14 con las diapositivas nuevas.
-- `../setup/README.md` — comandos exactos del setup y la tabla de verificación.
-- `../docs/verificacion-v2.md` — datos técnicos de OpenCode 2 citados (`opencode v2.x.y`); `../docs/verificacion-tecnica.md` y `../docs/transcripcion-deck.md` son históricas (V1), no fuentes de la página actual.
-- `../presentacion/mejorada/Curso de OpenCode - mejorada.pptx` — títulos, orden y numeración del deck V2 (20 diapositivas).
-- `../README.md` — estructura del kit que reproduce el árbol de `#archivos` (incluye `presentacion/`).
+### JavaScript sin dependencias
 
-El límite de una sesión de hasta 2 horas es la instrucción vigente del instructor para esta landing;
-no se muestran asignaciones de tiempo por bloque.
+Dos comportamientos, ambos escritos a mano en el `<script>` final:
 
-Si cambias el árbol del kit, cambia también `landing/index.html` (bloque `.tree-wrap`) y el README
-del kit: el árbol de la página es una copia del que se distribuye.
+- **Tabs del setup** (`[data-tabs]`): click, flechas ←/→, `Home`/`End` y *roving tabindex* (`aria-selected`, un único tabulador dentro del grupo).
+- **Revelado al hacer scroll**: `IntersectionObserver` con `rootMargin: "0px 0px -8% 0px"` y `threshold: 0.12`; cada elemento se observa una sola vez y deja de observarse al entrar.
 
-## Assets
+Sin JS, la página sigue siendo usable: `document.documentElement.classList` intercambia `no-js` por `js` al cargar, las pestañas se ocultan y **se muestran ambos paneles**, y todos los bloques aparecen sin animación.
 
-| Archivo | Origen |
+### Accesibilidad
+
+- Skip link al contenido, foco visible con `:focus-visible` y outline en el acento.
+- Pestañas implementadas con el patrón ARIA completo (`tablist` / `tab` / `tabpanel`).
+- Textos alternativos en todas las imágenes, iconos SVG marcados `aria-hidden`.
+- `prefers-reduced-motion: reduce` desactiva animaciones, scroll suave y transiciones.
+- Estilos de impresión: la página se imprime legible en blanco y negro.
+
+### SEO y social
+
+`lang="es"`, `theme-color`, y una tarjeta Open Graph completa (`og:image` 1200×630 en `assets/img/og-image.jpg`) replicada para Twitter (`summary_large_image`). El favicon es un SVG en línea con el glifo de prompt sobre fondo casi negro: cero peticiones extra.
+
+### Rendimiento
+
+- Fuentes Geist precargadas con `rel="preload"`, `font-display: swap` y `crossorigin`.
+- La imagen principal usa `fetchpriority="high"` y `decoding="async"`, con `width`/`height` declarados para evitar CLS.
+- Todas las imágenes están en WebP o PNG optimizado.
+
+## Contenido de la página
+
+| Sección | Contenido |
 | --- | --- |
-| `assets/img/opencode-wordmark-dark.png` | `docs/opencode-wordmark-dark.png` (variante para fondo oscuro) |
-| `assets/img/opencode-wordmark-light.png` | `docs/opencode-wordmark-light.png` (variante para fondo claro; hoy no se usa en la página) |
-| `assets/img/logo_infomg.png` | `docs/logo_infomg.png`; en el pie va sobre un chip claro porque el azul de la marca necesita fondo claro |
-| `assets/img/hero-opencode-v2.webp` | Versión WebP optimizada de `../presentacion/mejorada/imagenes/portada.png`, ilustración de portada generada para el deck V2 |
-| `assets/img/og-image.jpg` | Recorte 1200×630 de la misma ilustración para Open Graph y la vista previa grande de X |
+| Hero | Título, propuesta de valor y acceso al temario |
+| Datos | Una sesión · 2 h máximo · 2 demos aplicadas · OpenCode 2 |
+| Temario | Seis bloques (0–5), con las diapositivas correspondientes de un deck de 20 |
+| Archivos del taller | Setup del entorno (Windows / macOS / Linux), cheat sheet y material de referencia |
+| Instructor | Néstor Peña y sus enlaces |
+| Footer | Créditos, marca y fecha de verificación de materiales |
 
-Notas:
+## Requisitos del entorno del taller
 
-- El logotipo de OpenCode es monocromo (no se recolorea) y el azul de infomanagement aparece solo
-  dentro de su propio chip.
-- Las imágenes sociales se declaran con ruta relativa. Antes de publicar, confirma que el
-  previsualizador las resuelve; si requiere una URL absoluta, actualiza `og:image` y `twitter:image`
-  con la URL pública elegida.
-- El icono de X y la flecha de los enlaces externos son SVG en línea (el de X procede de Simple
-  Icons, licencia MIT). El favicon es un SVG en `data:` — cero peticiones de red.
+Los comandos que aparecen en la página (para preparar el entorno antes de la sesión) son:
 
-## Fuentes y licencia
+```powershell
+# Windows — solo verifica, sin instalar nada
+powershell -ExecutionPolicy Bypass -File .\setup\setup-windows.ps1 -Check
+# Windows — aplica
+powershell -ExecutionPolicy Bypass -File .\setup\setup-windows.ps1
+```
 
-Geist Sans (400/500/600/700) y Geist Mono (400/500) se sirven autoalojadas desde
-`assets/fonts/*.woff2`, con `font-display: swap`. Los archivos vienen del paquete Fontsource
-(jsDelivr) y se muestrean en `latin`.
+```bash
+# macOS / Linux — solo verifica
+bash setup/setup-macos-linux.sh --check
+# macOS / Linux — aplica
+bash setup/setup-macos-linux.sh
+```
 
-**Licencia:** SIL Open Font License 1.1 — `Copyright 2024 The Geist Project Authors
-(https://github.com/vercel/geist-font)`. El texto completo está en `assets/fonts/OFL.txt` y debe
-acompañar a los `.woff2` si se redistribuyen (condición 2 de la OFL).
+Verificación posterior:
 
-No se carga ninguna fuente desde Google Fonts ni desde un CDN en tiempo de ejecución.
+```bash
+opencode --version        # responde "opencode v2.x.y"
+opencode mcp list        # Context7 aparece conectado
+```
 
-## Comportamiento y accesibilidad
+> **Nota sobre Windows:** el script del kit usa la ruta de instalación con npm, probada localmente con OpenCode 2.0.27. La documentación oficial de V2 indica que los gestores de paquetes no están soportados en Windows y ofrece el [binario independiente](https://opencode.ai/v2/docs/).
 
-- **Movimiento:** entrada del héroe (transform + `clip-path`), revelados por `IntersectionObserver`
-  y física de hover. Nada escucha `scroll`. Con `prefers-reduced-motion: reduce` se apaga todo y el
-  contenido queda visible sin animaciones.
-- **Pestañas del setup:** `role="tablist"` con teclado completo (flechas, Inicio/Fin). Sin
-  JavaScript se muestran los dos paneles a la vez con su propio rótulo (degradación explícita).
-- **Contraste medido en el navegador** (no estimado) sobre el fondo real de cada texto: el par más
-  bajo de la página es 5.2:1 y el cuerpo va de 7.4:1 a 16.7:1 — WCAG AA en todos los casos.
-- Foco visible con anillo naranja, `color-scheme: dark`, selección y barras de desplazamiento
-  tematizadas, enlace «Saltar al contenido» y texto alternativo en todas las imágenes.
-- Solo tema oscuro: no hay variante clara. El deck y la sala mandan, y mezclar temas en la misma
-  página rompe la lectura.
+## Cómo trabajar en el repositorio
 
-## Verificación de esta actualización
+1. Ramifica desde `main`.
+2. Mantén el cambio en `index.html` coherente con el sistema de diseño: si tocas color, radio o espaciado, usa las variables de `:root`.
+3. Revisa el resultado en móvil: la página se consulta desde un teléfono, y varios bloques cambian de layout por debajo de `700px`.
+4. Commit con mensajes convencionales (`feat:`, `fix:`, `docs:`, `chore:`). Sin atribución de IA ni `Co-Authored-By`.
+5. Abre un PR hacia `main`. El sitio se actualiza solo al hacer merge.
 
-- La landing refleja OpenCode 2 y el deck actual de 20 diapositivas; la diapositiva 20 corresponde a D14.
-- El temario ya no distribuye minutos por bloque. Indica una sesión única con un máximo de 2 horas.
-- Las rutas del hero y de la imagen social apuntan a assets locales optimizados; las rutas siguen siendo relativas.
-- La vista previa de navegador en escritorio y móvil queda pendiente: el servidor HTTP local no fue accesible en esta sesión.
+## Créditos y licencias
+
+- **Geist Sans / Geist Mono** — [*Vercel Geist*](https://vercel.com/font), bajo SIL Open Font License 1.1. Texto completo en [`assets/fonts/OFL.txt`](assets/fonts/OFL.txt).
+- **OpenCode** — nombre, wordmark e ilustración de portada son marcas de sus titulares; su uso aquí es referencial.
+- **infomanagement** — logotipo y marca © de sus titulares.
+- Las fotografías e ilustraciones de `assets/img/` son material original del taller.
+
+El repositorio no incluye un archivo `LICENSE`. Sin licencia explícita, se aplica la reserva de derechos por defecto: si necesitas reutilizar el código o los materiales, pide autorización primero.
+
+## Contacto
+
+Néstor Peña · [@neshack](https://x.com/neshack) · [LinkedIn](https://www.linkedin.com/in/neshack)
