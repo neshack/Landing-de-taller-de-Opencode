@@ -116,6 +116,12 @@ ol,ul{padding:0;list-style:none}
 .brand{display:inline-flex;align-items:center;border-radius:6px}
 .brand img{width:auto;height:19px}
 .topnav{display:flex;align-items:center;gap:clamp(1rem,2.5vw,2rem)}
+.brand-mg{
+  display:inline-flex;align-items:center;border-radius:6px;
+  background:#E8EEF5;padding:.4rem .6rem;transition:opacity .2s var(--ease);
+}
+.brand-mg img{width:auto;height:18px;display:block}
+.brand-mg:hover{opacity:.8}
 .navlink{
   font-size:.9375rem;font-weight:500;color:var(--ink-2);text-decoration:none;
   text-underline-offset:.3em;transition:color .2s var(--ease);
@@ -365,8 +371,9 @@ ol,ul{padding:0;list-style:none}
 .who-cap{font-size:.9375rem;color:var(--ink-3)}
 .who-name{font-size:clamp(1.35rem,2.4vw,1.75rem);font-weight:600;letter-spacing:-0.025em}
 .who-role{margin-top:.3rem;font-size:.9375rem;color:var(--ink-2)}
+.who-links{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem 1.5rem;margin-top:.9rem}
 .who-x{
-  display:inline-flex;align-items:center;gap:.5rem;margin-top:.9rem;
+  display:inline-flex;align-items:center;gap:.5rem;
   font:.875rem/1 var(--mono);color:var(--ink);text-decoration:none;
   text-underline-offset:.3em;transition:color .2s var(--ease);
 }
@@ -450,12 +457,9 @@ ol,ul{padding:0;list-style:none}
       <img src="assets/img/opencode-wordmark-dark.png" alt="OpenCode" width="1282" height="230">
     </a>
     <nav class="topnav" aria-label="Navegación del taller">
-      <a class="navlink navlink-temario" href="#temario">Ver el temario</a>
-      <a class="navlink navlink-x" href="https://x.com/neshack" rel="me noopener">
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg>
-        @neshack
-        <svg class="arrow" viewBox="0 0 12 12" aria-hidden="true" focusable="false"><path d="M2 10 10 2M4.6 2H10v5.4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
+      <a href="https://infomg.mx" target="_blank" rel="noopener noreferrer" aria-label="infomanagement, sitio web">
+        <img src="assets/img/logo_infomg_blanco.png" alt="infomanagement" width="250" height="80">
+      </a>      
     </nav>
   </div>
 </header>
@@ -481,11 +485,7 @@ ol,ul{padding:0;list-style:none}
         <p class="hero-sub" style="--i:3">Taller práctico para consultores: fundamentos de OpenCode 2 y dos demos aplicadas, desde un proyecto nuevo hasta mantenimiento legacy.</p>
 
         <div class="hero-cta" style="--i:4">
-          <a class="btn btn-primary" href="#temario">Ver el temario</a>
-          <a class="btn btn-ghost" href="https://x.com/neshack" rel="me noopener">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg>
-            Ver perfil en X
-          </a>
+          <a class="btn btn-primary" href="#temario">Ver el temario</a>          
         </div>
       </div>
 
@@ -684,12 +684,18 @@ bash setup/setup-macos-linux.sh</code></pre>
     <div class="wrap who-in">
       <p class="who-cap">Quién lo imparte</p>
       <div>
-        <h2 id="who-title" class="who-name">Néstor Peña Morales</h2>
+        <h2 id="who-title" class="who-name">Néstor Peña</h2>
         <p class="who-role">Instructor del taller</p>
-        <a class="who-x" href="https://x.com/neshack" rel="me noopener">
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg>
-          @neshack
-        </a>
+        <div class="who-links">
+          <a class="who-x" href="https://x.com/neshack" target="_blank" rel="me noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14.234 10.162 22.977 0h-2.072l-7.591 8.824L7.251 0H.258l9.168 13.343L.258 24H2.33l8.016-9.318L16.749 24h6.993zm-2.837 3.299-.929-1.329L3.076 1.56h3.182l5.965 8.532.929 1.329 7.754 11.09h-3.182z"/></svg>
+            @neshack
+          </a>
+          <a class="who-x" href="https://www.linkedin.com/in/neshack" target="_blank" rel="me noopener">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.125 2.062 2.062 0 0 1 0 4.125zM7.119 20.452H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            LinkedIn
+          </a>
+        </div>
       </div>
     </div>
   </section>
@@ -700,12 +706,13 @@ bash setup/setup-macos-linux.sh</code></pre>
   <div class="wrap foot-in">
     <div class="foot-brand">
       <img class="wm" src="assets/img/opencode-wordmark-dark.png" alt="OpenCode" width="1282" height="230">
-      <span class="chip"><img src="assets/img/logo_infomg.png" alt="infomanagement" width="300" height="100"></span>
+      <a href="https://infomg.mx" target="_blank" rel="noopener noreferrer" aria-label="infomanagement, sitio web">
+        <img src="assets/img/logo_infomg_blanco.png" alt="infomanagement" width="250" height="50">
+      </a>
     </div>
-    <p class="foot-line">Un taller de Néstor Peña Morales · @neshack</p>
+    <p class="foot-line">Un taller de Néstor Peña · @neshack</p>
     <div class="foot-meta-block">
-      <p class="foot-meta">OpenCode 2 · materiales verificados el 2026-10-12</p>
-      <p class="foot-copy">© 2026 Néstor Peña Morales</p>
+      <p class="foot-meta">OpenCode 2 · materiales verificados el 2026-10-12</p>      
     </div>
   </div>
 </footer>
